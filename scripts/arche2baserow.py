@@ -52,19 +52,19 @@ properties_fields = update_table_field_types(
 with open("out/properties_default.json", "r") as f:
     file = json.load(f)
 
-update_table_rows(BASEROW_DB_ID, file)
+update_table_rows(properties_table, file)
 
 with open("out/classes_default.json", "r") as f:
     file = json.load(f)
 
-update_table_rows(BASEROW_DB_ID, file)
+update_table_rows(class_table, file)
 
 with open("out/properties.json", "r") as f:
     file = json.load(f)
 
-update_table_rows(BASEROW_DB_ID, file)
+update_table_rows(properties_table, file)
 
 with open("out/classes.json", "r") as f:
     file = json.load(f)
 
-update_table_rows(BASEROW_DB_ID, file)
+update_table_rows(class_table, file)
