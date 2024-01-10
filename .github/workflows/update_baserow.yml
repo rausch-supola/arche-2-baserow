@@ -3,7 +3,7 @@ name: Uploading Arche Schema to Baserow
 on:
   workflow_dispatch:
     inputs:
-      databsase_id:
+      database_id:
         type: number
         description: 'Database ID as number'
         required: true
@@ -31,6 +31,6 @@ jobs:
         env:
           BASEROW_TOKEN: ${{ secrets.BASEROW_TOKEN }}
           BASEROW_URL: ${{ secrets.BASEROW_URL }}
-          BASEROW_DB_ID: ${{ inputs.databsase_id }}
+          BASEROW_DB_ID: ${{ github.event.inputs.database_id }}
           BASEROW_USER: ${{ secrets.BASEROW_USER }}
           BASEROW_PW: ${{ secrets.BASEROW_PW }}
