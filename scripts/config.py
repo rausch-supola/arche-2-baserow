@@ -2,7 +2,7 @@ import os
 from acdh_baserow_pyutils import BaseRowClient
 
 # Baserow config
-BASEROW_DB_ID = os.environ.get("BASE_ROW_DB_ID")
+BASEROW_DB_ID = os.environ.get("BASEROW_DB_ID")
 BASEROW_URL = "https://baserow.acdh-dev.oeaw.ac.at/api/"
 BASEROW_USER = os.environ.get("BASEROW_USER")
 BASEROW_PW = os.environ.get("BASEROW_PW")
