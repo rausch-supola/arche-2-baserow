@@ -11,8 +11,13 @@ on:
 
 jobs:
   update_baserow:
-    runs-on: ubuntu-latest
     name: Uploading Arche Schema to Baserow
+    runs-on: ubuntu-latest
+    env:
+      BASEROW_TOKEN: ${{ secrets.BASEROW_TOKEN }}
+      BASEROW_DB_ID: ${{ github.event.inputs.database_id }}
+      BASEROW_USER: ${{ secrets.BASEROW_USER }}
+      BASEROW_PW: ${{ secrets.BASEROW_PW }}
     steps:
       - name: Check out source repository
         uses: actions/checkout@v3
@@ -28,9 +33,4 @@ jobs:
         run: |
           python scripts/arche2json.py
           python scripts/arche2baserow.py
-        env:
-          BASEROW_TOKEN: ${{ secrets.BASEROW_TOKEN }}
-          BASEROW_URL: ${{ secrets.BASEROW_URL }}
-          BASEROW_DB_ID: ${{ github.event.inputs.database_id }}
-          BASEROW_USER: ${{ secrets.BASEROW_USER }}
-          BASEROW_PW: ${{ secrets.BASEROW_PW }}
+        
