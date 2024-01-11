@@ -73,7 +73,7 @@ def update_table_rows_batch(br_table_id: int, table: dict) -> None:
                 json=table
             )
             if r.status_code == 200:
-                print(f"Created ")
+                print("Created")
             else:
                 print(f"Error {r.status_code}")
     except Exception as e:

@@ -2,9 +2,14 @@ import json
 from config import (jwt_token, BASEROW_DB_ID)
 from utils.baserow import (create_database_table, update_table_field_types, update_table_rows_batch)
 
+# load json files with classes and properites
+with open("out/properties.json", "r") as f:
+    properties = json.load(f)
+with open("out/classes.json", "r") as f:
+    classes = json.load(f)
 # create tables
-classes = create_database_table(BASEROW_DB_ID, jwt_token, "Classes")
-properties = create_database_table(BASEROW_DB_ID, jwt_token, "Properties")
+classes = create_database_table(BASEROW_DB_ID, jwt_token, "Classes", classes)
+properties = create_database_table(BASEROW_DB_ID, jwt_token, "Properties", properties)
 print(classes)
 print(properties)
 print("Tables created...")
@@ -59,12 +64,5 @@ properties_fields = update_table_field_types(
 
 # update_table_rows(class_table, file)
 
-with open("out/properties.json", "r") as f:
-    file = json.load(f)
-
-update_table_rows_batch(properties_table, file)
-
-with open("out/classes.json", "r") as f:
-    file = json.load(f)
-
-update_table_rows_batch(class_table, file)
+update_table_rows_batch(properties_table, properties)
+update_table_rows_batch(class_table, classes)
