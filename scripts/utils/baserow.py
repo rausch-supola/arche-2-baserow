@@ -48,7 +48,7 @@ def update_table_rows_batch(br_table_id: int, table: dict) -> None:
     Baserow table id and dictionary of rows are required."""
     br_rows_url = f"{BASEROW_URL}database/rows/table/{br_table_id}/batch/"
     items = {
-        "items": [table.values()]
+        "items": [v for v in table]
     }
     try:
         url = f"{br_rows_url}?user_field_names=true"
