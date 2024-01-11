@@ -73,7 +73,9 @@ default_fields = [
     {
         "name": "Uri",
         "type": "formula",
-        "formula": "lower(concat('https://id.acdh.oeaw.ac.at/', left(split_part(field('Name'), ', ' , 2), 1), split_part(field('Name'), ', ', 1)))"
+        "formula": """lower(concat('https://id.acdh.oeaw.ac.at/',
+                    left(split_part(field('Name'), ', ' , 2), 1),
+                    split_part(field('Name'), ', ', 1)))"""
     },
     {"name": "Identifier", "type": "text"},
     {"name": "Title", "type": "text"}
