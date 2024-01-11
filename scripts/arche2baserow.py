@@ -1,15 +1,15 @@
 import json
 from config import (jwt_token, BASEROW_DB_ID)
-from utils.baserow import (create_database_table, update_table_field_types, update_table_rows_batch)
+from utils.baserow import (create_database_table, update_table_field_types, update_table_rows_batch, delete_table_field)
 
 # load json files with classes and properites
 with open("out/properties_default.json", "r") as f:
-    properties = json.load(f)
+    properties_table = json.load(f)
 with open("out/classes_default.json", "r") as f:
-    classes = json.load(f)
+    classes_table = json.load(f)
 # create tables
-classes = create_database_table(BASEROW_DB_ID, jwt_token, "Classes", classes)
-properties = create_database_table(BASEROW_DB_ID, jwt_token, "Properties", properties)
+classes = create_database_table(BASEROW_DB_ID, jwt_token, "Classes", classes_table)
+properties = create_database_table(BASEROW_DB_ID, jwt_token, "Properties", properties_table)
 persons = create_database_table(BASEROW_DB_ID, jwt_token, "Persons")
 places = create_database_table(BASEROW_DB_ID, jwt_token, "Places")
 organizations = create_database_table(BASEROW_DB_ID, jwt_token, "Organizations")
@@ -74,6 +74,7 @@ default_fields = [
     {"name": "Uri", "type": "text"},
     {"name": "Identifier", "type": "text"}
 ]
+delete_table_field(persons["id"], jwt_token, ["Notes", "Active"])
 places_fields = update_table_field_types(
     places["id"],
     jwt_token,
@@ -90,8 +91,10 @@ organizations_fields = update_table_field_types(
     jwt_token,
     default_fields
 )
+delete_table_field(organizations["id"], jwt_token, ["Notes", "Active"])
 default_fields = [
     {"name": "Name", "type": "text"},
+    {"name": "Class", "type": "link_row", "link_row_table_id": classes["id"], "has_related_field": False},
     {"name": "Notes", "type": "long_text"},
     {"name": "Predicate_uri", "type": "link_row", "link_row_table_id": properties["id"], "has_related_field": False},
     {"name": "Object_uri_persons", "type": "link_row", "link_row_table_id": persons["id"], "has_related_field": False},
@@ -100,6 +103,12 @@ default_fields = [
         "name": "Object_uri_organizations",
         "type": "link_row",
         "link_row_table_id": organizations["id"],
+        "has_related_field": False
+    },
+    {
+        "name": "Object_uri_resource",
+        "type": "link_row",
+        "link_row_table_id": project["id"],
         "has_related_field": False
     },
     {"name": "Literal", "type": "text"},
@@ -112,6 +121,7 @@ project_fields = update_table_field_types(
     jwt_token,
     default_fields
 )
+delete_table_field(project["id"], jwt_token, ["Notes", "Active"])
 
 # Upading Baserow table rows
 with open("out/properties.json", "r") as f:

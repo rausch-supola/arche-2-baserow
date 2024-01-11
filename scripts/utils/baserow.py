@@ -156,3 +156,40 @@ def update_table_field_types(
                 print(f"Created field {x['name']} in {table_id}")
             else:
                 print(f"Error {r.status_code} with {table_id}")
+
+
+def delete_table_field(
+    table_id: int,
+    token: str,
+    field_names: list = ["Notes", "Active"]
+) -> None:
+    """Delete table fields of a Baserow table. Baserow table id, JWT token and field ids are required."""
+    br_table_url = f"{BASEROW_URL}database/fields/table/{table_id}/"
+    r = requests.get(
+        br_table_url,
+        headers={
+            "Authorization": f"JWT {token}",
+            "Content-Type": "application/json"
+        },
+    )
+    if r.status_code == 200:
+        response = r.json()
+        for x in response:
+            if x["name"] in field_names:
+                print("Deleting field... ", x["id"])
+                url = f"{BASEROW_URL}database/fields/{x['id']}/"
+                r = requests.delete(
+                    url,
+                    headers={
+                        "Authorization": f"JWT {token}",
+                        "Content-Type": "application/json"
+                    },
+                )
+                if r.status_code == 204:
+                    print(f"Deleted field {x['id']} in {table_id}")
+                else:
+                    print(f"Error {r.status_code} with {table_id}")
+        return response
+    else:
+        print(f"Error {r.status_code} with {table_id}")
+        return r.json()
