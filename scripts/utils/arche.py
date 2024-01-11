@@ -56,13 +56,13 @@ def save_dict(input, path) -> None:
     """saving all dictionaries to json files"""
     os.makedirs("out", exist_ok=True)
     with open(os.path.join("out", f"{path}.json"), "w") as f:
-        json.dump(dict(sorted(input.items())), f, indent=2)
+        json.dump((input), f, indent=2)
     print(f"{path}.json saved")
 
 
 def create_baserow_json(input: list) -> tuple[dict, dict]:
     """Create a dictionary of object properties"""
-    baserow_dict = {}
+    baserow_dict = []
     baserow_dict_id = {}
     num = 1
     for x in tqdm(input, total=len(input)):
@@ -80,14 +80,14 @@ def create_baserow_json(input: list) -> tuple[dict, dict]:
             baserow_dict_id[about] = num
             num += 1
         dict_id = baserow_dict_id[about]
-        baserow_dict[dict_id] = {
+        baserow_dict.append({
             "id": dict_id,
             "order": f"{ dict_id }.00000000000000000000",
             "Name": about_key,
             "Namespace": ns,
             "Label": label,
             "Notes": comment
-        }
+        })
     return baserow_dict, baserow_dict_id
 
 
@@ -98,15 +98,14 @@ def extend_baserow_json(
 ) -> dict:
     """create extended baserow json files of classes, object properties and datatype properties"""
     for x in tqdm(input, total=len(input)):
-        c_dict_id = input[x]["id"]
-        x_name = f"{input[x]['Namespace']}{input[x]['Name']}"
+        x_name = f"{x['Namespace']}{x['Name']}"
         xpath_id = f"//rdfs:subClassOf[child::owl:Restriction and parent::owl:Class[@rdf:about='{x_name}']]"
         extend = get_elements(schema, xpath_id)
         extendedMin = []
         extendedMax = []
-        for x in tqdm(extend, total=len(extend)):
-            onProperty, cardinality = get_elements(x, restriction_properties_x), \
-                get_elements(x, restriction_cardinality_x)
+        for e in tqdm(extend, total=len(extend)):
+            onProperty, cardinality = get_elements(e, restriction_properties_x), \
+                get_elements(e, restriction_cardinality_x)
             for prop, card in zip(onProperty, cardinality):
                 p = prop.attrib["{http://www.w3.org/1999/02/22-rdf-syntax-ns#}resource"]
                 c_datatype = card.tag.split("}")[-1]
@@ -118,8 +117,8 @@ def extend_baserow_json(
                         extendedMax.append(ipid2)
                 except KeyError:
                     print("KeyError: not found in input_ids")
-        input[c_dict_id]["Min1"] = extendedMin
-        input[c_dict_id]["Max1"] = extendedMax
+        x["Min1"] = extendedMin
+        x["Max1"] = extendedMax
     return input
 
 
@@ -133,15 +132,14 @@ def extend_baserow_json2(
 ) -> dict:
     """create extended baserow json files of classes, object properties and datatype properties"""
     for x in tqdm(input, total=len(input)):
-        c_dict_id = input[x]["id"]
-        x_name = f"{input[x]['Namespace']}{input[x]['Name']}"
+        x_name = f"{x['Namespace']}{x['Name']}"
         xpath_id = f"//rdfs:{xpath}[not(child::owl:Restriction) and parent::owl:{xpath2}[@rdf:about='{x_name}']]"
         extend = get_elements(schema, xpath_id)
         extended = []
         extendedNonLinked = []
-        for x in tqdm(extend, total=len(extend)):
+        for e in tqdm(extend, total=len(extend)):
             try:
-                s_resource = x.attrib["{http://www.w3.org/1999/02/22-rdf-syntax-ns#}resource"]
+                s_resource = e.attrib["{http://www.w3.org/1999/02/22-rdf-syntax-ns#}resource"]
                 try:
                     c_id = input_ids[s_resource]
                     extended.append(c_id)
@@ -149,13 +147,13 @@ def extend_baserow_json2(
                     extendedNonLinked.append(s_resource)
             except KeyError:
                 print("IndexError: not found in input_ids")
-                print(x)
+                print(e)
                 print(xpath_id)
         try:
-            for x in extended:
-                input[c_dict_id][column].append(x)
-            input[c_dict_id][f"{column}_NonLinked"] += " ".join(extendedNonLinked)
+            for i in extended:
+                x[column].append(i)
+            x[f"{column}_NonLinked"] += " ".join(extendedNonLinked)
         except KeyError:
-            input[c_dict_id][column] = extended
-            input[c_dict_id][f"{column}_NonLinked"] = " ".join(extendedNonLinked)
+            x[column] = extended
+            x[f"{column}_NonLinked"] = " ".join(extendedNonLinked)
     return input

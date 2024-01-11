@@ -8,7 +8,7 @@ def update_table_rows(br_table_id: int, table: dict) -> None:
     Baserow table id and dictionary of rows are required."""
     br_rows_url = f"{BASEROW_URL}database/rows/table/{br_table_id}/"
     for x in tqdm(table, total=len(table)):
-        row_id = x
+        row_id = x["id"]
         try:
             url = f"{br_rows_url}{row_id}/?user_field_names=true"
             print("Updating row... \n", url)
@@ -18,7 +18,7 @@ def update_table_rows(br_table_id: int, table: dict) -> None:
                     "Authorization": f"Token {BASEROW_TOKEN}",
                     "Content-Type": "application/json"
                 },
-                json=table[x]
+                json=x
             )
             if r.status_code == 200:
                 print(f"Updated {row_id}")
@@ -33,7 +33,7 @@ def update_table_rows(br_table_id: int, table: dict) -> None:
                         "Authorization": f"Token {BASEROW_TOKEN}",
                         "Content-Type": "application/json"
                     },
-                    json=table[x]
+                    json=x
                 )
                 if r.status_code == 200:
                     print(f"Created {row_id}")
@@ -47,6 +47,9 @@ def update_table_rows_batch(br_table_id: int, table: dict) -> None:
     """Batch updating a Baserow table with a dictionary of rows.
     Baserow table id and dictionary of rows are required."""
     br_rows_url = f"{BASEROW_URL}database/rows/table/{br_table_id}/batch/"
+    items = {
+        "items": [table.values()]
+    }
     try:
         url = f"{br_rows_url}?user_field_names=true"
         print("Updating row... \n", url)
@@ -56,7 +59,7 @@ def update_table_rows_batch(br_table_id: int, table: dict) -> None:
                 "Authorization": f"Token {BASEROW_TOKEN}",
                 "Content-Type": "application/json"
             },
-            json=table
+            json=items
         )
         if r.status_code == 200:
             print(f"Updated... Length rows: {len(table)}")
@@ -70,7 +73,7 @@ def update_table_rows_batch(br_table_id: int, table: dict) -> None:
                     "Authorization": f"Token {BASEROW_TOKEN}",
                     "Content-Type": "application/json"
                 },
-                json=table
+                json=items
             )
             if r.status_code == 200:
                 print("Created")
@@ -93,13 +96,13 @@ def create_database_table(
     }
     if table_values is not None:
         table["first_row_header"] = True
-        for x in table_values:
-            table_values[x].pop("id")
-            table_values[x].pop("order")
         table["data"] = []
-        table["data"].append([keys for keys in table_values["1"].keys()])
         for x in table_values:
-            table["data"].append([value for value in table_values[x].values()])
+            x.pop("id")
+            x.pop("order")
+        table["data"].append([k for k in table_values[0].keys()])
+        for x in table_values:
+            table["data"].append([v for v in x.values()])
     print("Creating table... ", br_db_url)
     r = requests.post(
         br_db_url,
@@ -143,13 +146,18 @@ def update_table_field_types(
         if r.status_code == 200:
             print(f"Updated field {x['name']} in {table_id}")
         else:
+            url = f"{br_table_url}?user_field_names=true"
             print(f"Error {r.status_code} with {table_id}")
             print("Field does not exist. Creating...")
             r = requests.post(
-                br_table_url,
+                url,
                 headers={
                     "Authorization": f"JWT {token}",
                     "Content-Type": "application/json"
                 },
                 json=x
             )
+            if r.status_code == 200:
+                print(f"Created field {x['name']} in {table_id}")
+            else:
+                print(f"Error {r.status_code} with {table_id}")
