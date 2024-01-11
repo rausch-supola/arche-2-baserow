@@ -101,7 +101,6 @@ def create_database_table(
         for x in table_values:
             table["data"].append([value for value in table_values[x].values()])
     print("Creating table... ", br_db_url)
-    print(table)
     r = requests.post(
         br_db_url,
         headers={
@@ -133,7 +132,7 @@ def update_table_field_types(
         )
     for x in tqdm(default_fields, total=len(default_fields)):
         print("Updating table... ", br_table_url)
-        r = requests.post(
+        r = requests.patch(
             br_table_url,
             headers={
                 "Authorization": f"JWT {token}",
@@ -145,3 +144,12 @@ def update_table_field_types(
             print(f"Updated field {x['name']} in {table_id}")
         else:
             print(f"Error {r.status_code} with {table_id}")
+            print("Field does not exist. Creating...")
+            r = requests.post(
+                br_table_url,
+                headers={
+                    "Authorization": f"JWT {token}",
+                    "Content-Type": "application/json"
+                },
+                json=x
+            )
