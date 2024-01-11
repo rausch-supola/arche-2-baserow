@@ -1,6 +1,6 @@
 import json
 from config import (jwt_token, BASEROW_DB_ID)
-from utils.baserow import (create_database_table, update_table_field_types, update_table_rows)
+from utils.baserow import (create_database_table, update_table_field_types, update_table_rows_batch)
 
 # create tables
 classes = create_database_table(BASEROW_DB_ID, jwt_token, "Classes")
@@ -10,7 +10,7 @@ print(properties)
 print("Tables created...")
 
 default_fields = [
-    {"name": "Comment", "type": "long_text"},
+    {"name": "Notes", "type": "long_text"},
     {"name": "Namespace", "type": "text"},
     {"name": "Label", "type": "text"},
     {"name": "Subclasses_NonLinked", "type": "text"}
@@ -32,7 +32,7 @@ classes_fields = update_table_field_types(
     {"name": "Min1", "id": properties["id"]}
 )
 default_fields = [
-    {"name": "Comment", "type": "long_text"},
+    {"name": "Notes", "type": "long_text"},
     {"name": "Namespace", "type": "text"},
     {"name": "Label", "type": "text"},
     {"name": "Subproperties_NonLinked", "type": "text"},
@@ -49,22 +49,22 @@ properties_fields = update_table_field_types(
 )
 
 # Upading Baserow table rows
-with open("out/properties_default.json", "r") as f:
-    file = json.load(f)
+# with open("out/properties_default.json", "r") as f:
+#     file = json.load(f)
 
-update_table_rows(properties_table, file)
+# update_table_rows(properties_table, file)
 
-with open("out/classes_default.json", "r") as f:
-    file = json.load(f)
+# with open("out/classes_default.json", "r") as f:
+#     file = json.load(f)
 
-update_table_rows(class_table, file)
+# update_table_rows(class_table, file)
 
 with open("out/properties.json", "r") as f:
     file = json.load(f)
 
-update_table_rows(properties_table, file)
+update_table_rows_batch(properties_table, file)
 
 with open("out/classes.json", "r") as f:
     file = json.load(f)
 
-update_table_rows(class_table, file)
+update_table_rows_batch(class_table, file)

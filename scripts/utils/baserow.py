@@ -43,16 +43,62 @@ def update_table_rows(br_table_id: int, table: dict) -> None:
             print(f"{e} with {row_id}")
 
 
+def update_table_rows_batch(br_table_id: int, table: dict) -> None:
+    """Batch updating a Baserow table with a dictionary of rows.
+    Baserow table id and dictionary of rows are required."""
+    br_rows_url = f"{BASEROW_URL}database/rows/table/{br_table_id}/batch/"
+    try:
+        url = f"{br_rows_url}?user_field_names=true"
+        print("Updating row... \n", url)
+        r = requests.patch(
+            url,
+            headers={
+                "Authorization": f"Token {BASEROW_TOKEN}",
+                "Content-Type": "application/json"
+            },
+            json=table
+        )
+        if r.status_code == 200:
+            print(f"Updated... Length rows: {len(table)}")
+        else:
+            print(f"Error {r.status_code}")
+            print("Row does not exist. Creating...")
+            print(url)
+            r = requests.post(
+                url,
+                headers={
+                    "Authorization": f"Token {BASEROW_TOKEN}",
+                    "Content-Type": "application/json"
+                },
+                json=table
+            )
+            if r.status_code == 200:
+                print(f"Created ")
+            else:
+                print(f"Error {r.status_code}")
+    except Exception as e:
+        print(e)
+
+
 def create_database_table(
     database_id: int,
     token: str,
-    table_name: str
+    table_name: str,
+    table_values: dict = None
 ) -> None:
     """Creating a new Baserow table. Baserow database id, JWT token and table name are required."""
     br_db_url = f"{BASEROW_URL}database/tables/database/{database_id}/"
     table = {
         "name": table_name
     }
+    if table_values is not None:
+        for x in table_values:
+            table_values[x].pop("id")
+            table_values[x].pop("order")
+        table["data"] = []
+        table["data"].append([keys for keys in table_values["1"].keys()])
+        for x in table_values:
+            table["data"].append([value for value in table_values[x].values()])
     print("Creating table... ", br_db_url)
     print(table)
     r = requests.post(
