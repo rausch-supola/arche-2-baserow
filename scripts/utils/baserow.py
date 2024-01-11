@@ -124,15 +124,10 @@ def create_database_table(
 def update_table_field_types(
     table_id: int,
     token: str,
-    default_fields: dict,
-    *args: dict
+    default_fields: dict
 ) -> None:
     """Upading Baserow table field types. Baserow table id, JWT token, default fields and"""
     br_table_url = f"{BASEROW_URL}database/fields/table/{table_id}/"
-    for x in args:
-        default_fields.append(
-            {"name": x["name"], "type": "link_row", "link_row_table_id": x["id"], "has_related_fields": False}
-        )
     for x in tqdm(default_fields, total=len(default_fields)):
         print("Updating table... ", br_table_url)
         r = requests.patch(
