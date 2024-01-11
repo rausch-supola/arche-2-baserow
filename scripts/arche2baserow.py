@@ -7,6 +7,7 @@ with open("out/properties_default.json", "r") as f:
     properties_table = json.load(f)
 with open("out/classes_default.json", "r") as f:
     classes_table = json.load(f)
+
 # create tables
 classes = create_database_table(BASEROW_DB_ID, jwt_token, "Classes", classes_table)
 properties = create_database_table(BASEROW_DB_ID, jwt_token, "Properties", properties_table)
@@ -16,6 +17,10 @@ organizations = create_database_table(BASEROW_DB_ID, jwt_token, "Organizations")
 project = create_database_table(BASEROW_DB_ID, jwt_token, "Project")
 print(classes)
 print(properties)
+print(persons)
+print(places)
+print(organizations)
+print(project)
 print("Tables created...")
 
 try:
@@ -26,6 +31,8 @@ except KeyError:
     exit()
 
 print("Updating table fields...")
+
+# class table fields
 default_fields = [
     {"name": "Notes", "type": "long_text"},
     {"name": "Namespace", "type": "text"},
@@ -40,6 +47,8 @@ classes_fields = update_table_field_types(
     jwt_token,
     default_fields
 )
+
+# properties table fields
 default_fields = [
     {"name": "Notes", "type": "long_text"},
     {"name": "Namespace", "type": "text"},
@@ -56,10 +65,16 @@ properties_fields = update_table_field_types(
     jwt_token,
     default_fields
 )
+
+# persons table fields
 default_fields = [
     {"name": "Name", "type": "text"},
     {"name": "Notes", "type": "long_text"},
-    {"name": "Uri", "type": "text"},
+    {
+        "name": "Uri",
+        "type": "formula",
+        "formula": "lower(concat('https://id.acdh.oeaw.ac.at/', left(split_part(field('Name'), ', ' , 2), 1), split_part(field('Name'), ', ', 1)))"
+    },
     {"name": "Identifier", "type": "text"},
     {"name": "Title", "type": "text"}
 ]
@@ -68,22 +83,35 @@ persons_fields = update_table_field_types(
     jwt_token,
     default_fields
 )
+delete_table_field(persons["id"], jwt_token, ["Notes", "Active"])
+
+# places table fields
 default_fields = [
     {"name": "Name", "type": "text"},
     {"name": "Notes", "type": "long_text"},
-    {"name": "Uri", "type": "text"},
+    {
+        "name": "Uri",
+        "type": "formula",
+        "formula": "lower(concat('https://id.acdh.oeaw.ac.at/place-', field('Name')))"
+    },
     {"name": "Identifier", "type": "text"}
 ]
-delete_table_field(persons["id"], jwt_token, ["Notes", "Active"])
 places_fields = update_table_field_types(
     places["id"],
     jwt_token,
     default_fields
 )
+delete_table_field(places["id"], jwt_token, ["Notes", "Active"])
+
+# organizations table fields
 default_fields = [
     {"name": "Name", "type": "text"},
     {"name": "Notes", "type": "long_text"},
-    {"name": "Uri", "type": "text"},
+    {
+        "name": "Uri",
+        "type": "formula",
+        "formula": "lower(concat('https://id.acdh.oeaw.ac.at/org-', field('Name')))"
+    },
     {"name": "Identifier", "type": "text"}
 ]
 organizations_fields = update_table_field_types(
@@ -92,6 +120,8 @@ organizations_fields = update_table_field_types(
     default_fields
 )
 delete_table_field(organizations["id"], jwt_token, ["Notes", "Active"])
+
+# project table fields
 default_fields = [
     {"name": "Name", "type": "text"},
     {"name": "Class", "type": "link_row", "link_row_table_id": classes["id"], "has_related_field": False},
