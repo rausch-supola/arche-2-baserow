@@ -92,6 +92,7 @@ def create_database_table(
         "name": table_name
     }
     if table_values is not None:
+        table["first_row_header"] = True
         for x in table_values:
             table_values[x].pop("id")
             table_values[x].pop("order")
