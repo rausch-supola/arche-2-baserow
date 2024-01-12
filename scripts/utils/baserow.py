@@ -185,7 +185,7 @@ def delete_table_field(
                         "Content-Type": "application/json"
                     },
                 )
-                if r.status_code == 204:
+                if r.status_code == 200:
                     print(f"Deleted field {x['id']} in {table_id}")
                 else:
                     print(f"Error {r.status_code} with {table_id}")

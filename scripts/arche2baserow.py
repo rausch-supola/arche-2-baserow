@@ -163,3 +163,176 @@ with open("out/classes.json", "r") as f:
 
 update_table_rows_batch(properties_table, properties)
 update_table_rows_batch(class_table, classes)
+
+project_properties = [
+    "hasTitle",
+    "hasIdentifier",
+    "hasDescription",
+    "hasContact",
+    "hasMetadataCreator",
+    "hasRelatedDiscipline",
+    "hasSubject",
+    "hasRelatedCollection"
+]
+topCol_properties = [
+    "hasTitle",
+    "hasIdentifier",
+    "hasDescription",
+    "hasContact",
+    "hasMetadataCreator",
+    "hasRelatedDiscipline",
+    "hasSubject",
+    "hasOwner",
+    "hasRightsHolder",
+    "hasLicensor",
+    "hasDepositor",
+    "hasCurator",
+    "isPartOf"
+]
+collection_properties = [
+    "hasTitle",
+    "hasIdentifier",
+    "hasMetadataCreator",
+    "hasRelatedDiscipline",
+    "hasOwner",
+    "hasRightsHolder",
+    "hasLicensor",
+    "hasDepositor",
+    "isPartOf"
+]
+resource_properties = [
+    "hasTitle",
+    "hasIdentifier",
+    "hasMetadataCreator",
+    "hasRelatedDiscipline",
+    "hasOwner",
+    "hasRightsHolder",
+    "hasLicensor",
+    "hasDepositor",
+    "isPartOf"
+    "hasCategory",
+    "hasLicense",
+    "hasAccessRestriction"
+]
+metadata_properties = [
+    "hasTitle",
+    "hasIdentifier",
+    "hasMetadataCreator",
+    "hasOwner",
+    "hasRightsHolder",
+    "hasLicensor",
+    "hasDepositor",
+    "isPartOf"
+    "hasCategory",
+    "hasLicense",
+    "hasAccessRestriction"
+]
+# Create Initial Project Template
+ids = 1
+project_template = []
+for prop in project_properties:
+    project_template.append({
+        "id": ids,
+        "order": f"{ ids }.00000000000000000000",
+        "Name": "your-project-name",
+        "Class": [x["id"] for x in classes if x["Name"] == "Project" and
+                  x["Namespace"] == "https://vocabs.acdh.oeaw.ac.at/schema#"],
+        "Predicate_uri": [x["id"] for x in properties if x["Name"] == prop and
+                          x["Namespace"] == "https://vocabs.acdh.oeaw.ac.at/schema#"],
+        "Object_uri_persons": [],
+        "Object_uri_places": [],
+        "Object_uri_organizations": [],
+        "Object_uri_resource": [],
+        "Literal": None,
+        "Language": None,
+        "Date": None,
+        "Number": None
+    })
+    ids += 1
+topCol_template = []
+for prop in topCol_properties:
+    topCol_template.append({
+        "id": ids,
+        "order": f"{ ids }.00000000000000000000",
+        "Name": "your-project-name",
+        "Class": [x["id"] for x in classes if x["Name"] == "topCollection" and
+                  x["Namespace"] == "https://vocabs.acdh.oeaw.ac.at/schema#"],
+        "Predicate_uri": [x["id"] for x in properties if x["Name"] == prop and
+                          x["Namespace"] == "https://vocabs.acdh.oeaw.ac.at/schema#"],
+        "Object_uri_persons": [],
+        "Object_uri_places": [],
+        "Object_uri_organizations": [],
+        "Object_uri_resource": [],
+        "Literal": None,
+        "Language": None,
+        "Date": None,
+        "Number": None
+    })
+    ids += 1
+collection_template = []
+for prop in collection_properties:
+    collection_template.append({
+        "id": ids,
+        "order": f"{ ids }.00000000000000000000",
+        "Name": "your-project-name",
+        "Class": [x["id"] for x in classes if x["Name"] == "Collection" and
+                  x["Namespace"] == "https://vocabs.acdh.oeaw.ac.at/schema#"],
+        "Predicate_uri": [x["id"] for x in properties if x["Name"] == prop and
+                          x["Namespace"] == "https://vocabs.acdh.oeaw.ac.at/schema#"],
+        "Object_uri_persons": [],
+        "Object_uri_places": [],
+        "Object_uri_organizations": [],
+        "Object_uri_resource": [],
+        "Literal": None,
+        "Language": None,
+        "Date": None,
+        "Number": None
+    })
+    ids += 1
+resource_template = []
+for prop in resource_properties:
+    resource_template.append({
+        "id": ids,
+        "order": f"{ ids }.00000000000000000000",
+        "Name": "your-project-name",
+        "Class": [x["id"] for x in classes if x["Name"] == "Resource" and
+                  x["Namespace"] == "https://vocabs.acdh.oeaw.ac.at/schema#"],
+        "Predicate_uri": [x["id"] for x in properties if x["Name"] == prop and
+                          x["Namespace"] == "https://vocabs.acdh.oeaw.ac.at/schema#"],
+        "Object_uri_persons": [],
+        "Object_uri_places": [],
+        "Object_uri_organizations": [],
+        "Object_uri_resource": [],
+        "Literal": None,
+        "Language": None,
+        "Date": None,
+        "Number": None
+    })
+    ids += 1
+metadata_properties = []
+for prop in metadata_properties:
+    metadata_properties.append({
+        "id": ids,
+        "order": f"{ ids }.00000000000000000000",
+        "Name": "your-project-name",
+        "Class": [x["id"] for x in classes if x["Name"] == "Metadata" and
+                  x["Namespace"] == "https://vocabs.acdh.oeaw.ac.at/schema#"],
+        "Predicate_uri": [x["id"] for x in properties if x["Name"] == prop and
+                          x["Namespace"] == "https://vocabs.acdh.oeaw.ac.at/schema#"],
+        "Object_uri_persons": [],
+        "Object_uri_places": [],
+        "Object_uri_organizations": [],
+        "Object_uri_resource": [],
+        "Literal": None,
+        "Language": None,
+        "Date": None,
+        "Number": None
+    })
+    ids += 1
+print(f"Updating {ids} Project table rows...")
+update_table_rows_batch(project["id"], project_template)
+update_table_rows_batch(project["id"], topCol_template)
+update_table_rows_batch(project["id"], collection_template)
+update_table_rows_batch(project["id"], resource_template)
+update_table_rows_batch(project["id"], metadata_properties)
+print("Done...")
