@@ -209,7 +209,7 @@ resource_properties = [
     "hasRightsHolder",
     "hasLicensor",
     "hasDepositor",
-    "isPartOf"
+    "isPartOf",
     "hasCategory",
     "hasLicense",
     "hasAccessRestriction"
@@ -222,7 +222,7 @@ metadata_properties = [
     "hasRightsHolder",
     "hasLicensor",
     "hasDepositor",
-    "isPartOf"
+    "isPartOf",
     "hasCategory",
     "hasLicense",
     "hasAccessRestriction"
@@ -234,7 +234,7 @@ for prop in project_properties:
     project_template.append({
         "id": ids,
         "order": f"{ ids }.00000000000000000000",
-        "Name": "your-project-name",
+        "Name": "your-project",
         "Class": [x["id"] for x in classes if x["Name"] == "Project" and
                   x["Namespace"] == "https://vocabs.acdh.oeaw.ac.at/schema#"],
         "Predicate_uri": [x["id"] for x in properties if x["Name"] == prop and
@@ -254,8 +254,8 @@ for prop in topCol_properties:
     topCol_template.append({
         "id": ids,
         "order": f"{ ids }.00000000000000000000",
-        "Name": "your-project-name",
-        "Class": [x["id"] for x in classes if x["Name"] == "topCollection" and
+        "Name": "your-top-collection",
+        "Class": [x["id"] for x in classes if x["Name"] == "TopCollection" and
                   x["Namespace"] == "https://vocabs.acdh.oeaw.ac.at/schema#"],
         "Predicate_uri": [x["id"] for x in properties if x["Name"] == prop and
                           x["Namespace"] == "https://vocabs.acdh.oeaw.ac.at/schema#"],
@@ -274,7 +274,7 @@ for prop in collection_properties:
     collection_template.append({
         "id": ids,
         "order": f"{ ids }.00000000000000000000",
-        "Name": "your-project-name",
+        "Name": "your-collection",
         "Class": [x["id"] for x in classes if x["Name"] == "Collection" and
                   x["Namespace"] == "https://vocabs.acdh.oeaw.ac.at/schema#"],
         "Predicate_uri": [x["id"] for x in properties if x["Name"] == prop and
@@ -294,7 +294,7 @@ for prop in resource_properties:
     resource_template.append({
         "id": ids,
         "order": f"{ ids }.00000000000000000000",
-        "Name": "your-project-name",
+        "Name": "your-resource",
         "Class": [x["id"] for x in classes if x["Name"] == "Resource" and
                   x["Namespace"] == "https://vocabs.acdh.oeaw.ac.at/schema#"],
         "Predicate_uri": [x["id"] for x in properties if x["Name"] == prop and
@@ -309,12 +309,12 @@ for prop in resource_properties:
         "Number": None
     })
     ids += 1
-metadata_properties = []
+metadata_template = []
 for prop in metadata_properties:
-    metadata_properties.append({
+    metadata_template.append({
         "id": ids,
         "order": f"{ ids }.00000000000000000000",
-        "Name": "your-project-name",
+        "Name": "your-metadata",
         "Class": [x["id"] for x in classes if x["Name"] == "Metadata" and
                   x["Namespace"] == "https://vocabs.acdh.oeaw.ac.at/schema#"],
         "Predicate_uri": [x["id"] for x in properties if x["Name"] == prop and
