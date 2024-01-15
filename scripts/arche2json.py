@@ -12,6 +12,8 @@ from config import (SCHEMA_PATH, XPATHS)
 # Arche xpaths
 classes_x = XPATHS["classes"]
 properties_x = XPATHS["properties"]
+label_x = XPATHS["label"]
+comment_x = XPATHS["comment"]
 
 # Arche schema url
 url = SCHEMA_PATH
@@ -22,8 +24,8 @@ classes = get_elements(schema, classes_x)
 properties = get_elements(schema, properties_x)
 
 # create standard baserow json files of classes, object properties and datatype properties
-properties_dict, properties_dict_ids = create_baserow_json(properties)
-classes_dict, classes_dict_ids = create_baserow_json(classes)
+properties_dict, properties_dict_ids = create_baserow_json(properties, label_x, comment_x)
+classes_dict, classes_dict_ids = create_baserow_json(classes, label_x, comment_x)
 
 # save standard baserow json files of classes, object properties and datatype properties
 save_rdf_xml(schema, "schema")

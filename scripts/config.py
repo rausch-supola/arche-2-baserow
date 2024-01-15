@@ -9,6 +9,7 @@ BASEROW_PW = os.environ.get("BASEROW_PW")
 BASEROW_TOKEN = os.environ.get("BASEROW_TOKEN")
 # Arche schema url, namespaces and xpaths
 SCHEMA_PATH = "https://raw.githubusercontent.com/acdh-oeaw/arche-schema/master/acdh-schema.owl"
+VOCABS_PATH = "https://github.com/acdh-oeaw/vocabs-acdh-dumps/raw/main/vocabs-main/"
 NAMESPACES = {
     "xmlns": "https://vocabs.acdh.oeaw.ac.at/acdh#",
     "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",

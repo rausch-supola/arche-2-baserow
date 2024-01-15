@@ -2,6 +2,31 @@ import json
 from config import (jwt_token, BASEROW_DB_ID)
 from utils.baserow import (create_database_table, update_table_field_types, update_table_rows_batch, delete_table_field)
 
+vocabs_files = {
+    "vocabs_categories": "out/archecategory.json",
+    "vocabs_access_restriction": "out/archeaccessrestrictions.json",
+    "vocabs_licenses": "out/archelicenses.json",
+    "vocabs_lifecyclestatus": "out/archelifecyclestatus.json",
+    "vocabs_oaisets": "out/archeoaisets.json",
+    "vocabs_oefosdisciplines": "out/oefos_disciplines.json",
+    "vocabs_languagecodes": "out/ISO-639-3-languages.json"
+}
+
+merged_table = []
+for file in vocabs_files.values():
+    filename = file.split("/")[-1].split(".")[0]
+    # load json files with classes
+    with open(file, "r") as f:
+        table = json.load(f)
+    merged_table.extend(table)
+
+with open("out/Vocabs.json", "w") as f:
+    json.dump(merged_table, f, indent=2)
+
+# create table
+vocabs = create_database_table(BASEROW_DB_ID, jwt_token, "Vocabs", merged_table)
+print("Vocabs uploaded to Baserow...")
+
 # load json files with classes and properites
 with open("out/properties_default.json", "r") as f:
     properties_table = json.load(f)
@@ -141,6 +166,12 @@ default_fields = [
         "name": "Object_uri_resource",
         "type": "link_row",
         "link_row_table_id": project["id"],
+        "has_related_field": False
+    },
+    {
+        "name": "Object_uri_vocabs",
+        "type": "link_row",
+        "link_row_table_id": vocabs["id"],
         "has_related_field": False
     },
     {"name": "Literal", "type": "text"},

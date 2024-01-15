@@ -6,8 +6,6 @@ from tqdm import tqdm
 from config import NAMESPACES, XPATHS
 
 namespaces = NAMESPACES
-label_x = XPATHS["label"]
-comment_x = XPATHS["comment"]
 restriction_properties_x = XPATHS["restriction_properties"]
 restriction_cardinality_x = XPATHS["restriction_cardinality"]
 
@@ -31,15 +29,15 @@ def save_rdf_xml(root: ET.ElementTree, path) -> None:
     print(f"{path}.xml saved")
 
 
-def get_label_and_comment(element: ET.Element) -> tuple[str, str]:
+def get_label_and_comment(element: ET.Element, xpath_l, xpath_c) -> tuple[str, str]:
     """Return the label and comment of a given element"""
     try:
-        label = element.xpath(label_x,
+        label = element.xpath(xpath_l,
                               namespaces=namespaces)[0]
     except IndexError:
         label = ""
     try:
-        comment = element.xpath(comment_x,
+        comment = element.xpath(xpath_c,
                                 namespaces=namespaces)[0]
     except IndexError:
         comment = ""
@@ -60,13 +58,13 @@ def save_dict(input, path) -> None:
     print(f"{path}.json saved")
 
 
-def create_baserow_json(input: list) -> tuple[dict, dict]:
+def create_baserow_json(input: list, xpath_l, xpath_c) -> tuple[dict, dict]:
     """Create a dictionary of object properties"""
     baserow_dict = []
     baserow_dict_id = {}
     num = 1
     for x in tqdm(input, total=len(input)):
-        label, comment = get_label_and_comment(x)
+        label, comment = get_label_and_comment(x, xpath_l, xpath_c)
         about = x.attrib["{http://www.w3.org/1999/02/22-rdf-syntax-ns#}about"]
         if "#" in about:
             about_key = about.split("#")[-1]
