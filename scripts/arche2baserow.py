@@ -125,7 +125,7 @@ delete_table_field(organizations["id"], jwt_token, ["Notes", "Active"])
 
 # project table fields
 default_fields = [
-    {"name": "Name", "type": "text"},
+    {"name": "Subject_uri", "type": "text"},
     {"name": "Class", "type": "link_row", "link_row_table_id": classes["id"], "has_related_field": False},
     {"name": "Notes", "type": "long_text"},
     {"name": "Predicate_uri", "type": "link_row", "link_row_table_id": properties["id"], "has_related_field": False},
