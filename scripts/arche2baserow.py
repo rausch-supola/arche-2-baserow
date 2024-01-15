@@ -14,7 +14,7 @@ properties = create_database_table(BASEROW_DB_ID, jwt_token, "Properties", prope
 persons = create_database_table(BASEROW_DB_ID, jwt_token, "Persons")
 places = create_database_table(BASEROW_DB_ID, jwt_token, "Places")
 organizations = create_database_table(BASEROW_DB_ID, jwt_token, "Organizations")
-project = create_database_table(BASEROW_DB_ID, jwt_token, "Project")
+project = create_database_table(BASEROW_DB_ID, jwt_token, "Project", "Subject_uri")
 print(classes)
 print(properties)
 print(persons)
@@ -234,7 +234,7 @@ for prop in project_properties:
     project_template.append({
         "id": ids,
         "order": f"{ ids }.00000000000000000000",
-        "Name": "your-project",
+        "Subject_uri": "your-project",
         "Class": [x["id"] for x in classes if x["Name"] == "Project" and
                   x["Namespace"] == "https://vocabs.acdh.oeaw.ac.at/schema#"],
         "Predicate_uri": [x["id"] for x in properties if x["Name"] == prop and
@@ -254,7 +254,7 @@ for prop in topCol_properties:
     topCol_template.append({
         "id": ids,
         "order": f"{ ids }.00000000000000000000",
-        "Name": "your-top-collection",
+        "Subject_uri": "your-top-collection",
         "Class": [x["id"] for x in classes if x["Name"] == "TopCollection" and
                   x["Namespace"] == "https://vocabs.acdh.oeaw.ac.at/schema#"],
         "Predicate_uri": [x["id"] for x in properties if x["Name"] == prop and
@@ -274,7 +274,7 @@ for prop in collection_properties:
     collection_template.append({
         "id": ids,
         "order": f"{ ids }.00000000000000000000",
-        "Name": "your-collection",
+        "Subject_uri": "your-collection",
         "Class": [x["id"] for x in classes if x["Name"] == "Collection" and
                   x["Namespace"] == "https://vocabs.acdh.oeaw.ac.at/schema#"],
         "Predicate_uri": [x["id"] for x in properties if x["Name"] == prop and
@@ -294,7 +294,7 @@ for prop in resource_properties:
     resource_template.append({
         "id": ids,
         "order": f"{ ids }.00000000000000000000",
-        "Name": "your-resource",
+        "Subject_uri": "your-resource",
         "Class": [x["id"] for x in classes if x["Name"] == "Resource" and
                   x["Namespace"] == "https://vocabs.acdh.oeaw.ac.at/schema#"],
         "Predicate_uri": [x["id"] for x in properties if x["Name"] == prop and
@@ -314,7 +314,7 @@ for prop in metadata_properties:
     metadata_template.append({
         "id": ids,
         "order": f"{ ids }.00000000000000000000",
-        "Name": "your-metadata",
+        "Subject_uri": "your-metadata",
         "Class": [x["id"] for x in classes if x["Name"] == "Metadata" and
                   x["Namespace"] == "https://vocabs.acdh.oeaw.ac.at/schema#"],
         "Predicate_uri": [x["id"] for x in properties if x["Name"] == prop and

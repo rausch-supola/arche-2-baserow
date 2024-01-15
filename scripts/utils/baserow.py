@@ -87,14 +87,14 @@ def create_database_table(
     database_id: int,
     token: str,
     table_name: str,
-    table_values: dict = None
+    table_values: dict = "Name"
 ) -> None:
     """Creating a new Baserow table. Baserow database id, JWT token and table name are required."""
     br_db_url = f"{BASEROW_URL}database/tables/database/{database_id}/"
     table = {
         "name": table_name
     }
-    if table_values is not None:
+    if isinstance(table_values, dict):
         table["first_row_header"] = True
         table["data"] = []
         for x in table_values:
@@ -103,6 +103,9 @@ def create_database_table(
         table["data"].append([k for k in table_values[0].keys()])
         for x in table_values:
             table["data"].append([v for v in x.values()])
+    else:
+        table["first_row_header"] = False
+        table["data"] = [[table_values]]
     print("Creating table... ", br_db_url)
     r = requests.post(
         br_db_url,
