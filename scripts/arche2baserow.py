@@ -94,16 +94,16 @@ properties_fields = update_table_field_types(
 # persons table fields
 default_fields = [
     {"name": "Name", "type": "text"},
-    {"name": "Notes", "type": "long_text"},
+    {"name": "Subject_uri", "type": "text"},
+    {"name": "Predicate_uri", "type": "link_row", "link_row_table_id": properties["id"], "has_related_field": False},
+    {"name": "Literal", "type": "text"},
     {
-        "name": "Uri",
-        "type": "formula",
-        "formula": """lower(concat('https://id.acdh.oeaw.ac.at/',
-                    left(split_part(field('Name'), ', ' , 2), 1),
-                    split_part(field('Name'), ', ', 1)))"""
+        "name": "Object_uri_organizations",
+        "type": "link_row",
+        "link_row_table_id": organizations["id"],
+        "has_related_field": False
     },
-    {"name": "Identifier", "type": "text"},
-    {"name": "Title", "type": "text"}
+    {"name": "Language", "type": "text"}
 ]
 persons_fields = update_table_field_types(
     persons["id"],
@@ -115,13 +115,10 @@ delete_table_field(persons["id"], jwt_token, ["Notes", "Active"])
 # places table fields
 default_fields = [
     {"name": "Name", "type": "text"},
-    {"name": "Notes", "type": "long_text"},
-    {
-        "name": "Uri",
-        "type": "formula",
-        "formula": "lower(concat('https://id.acdh.oeaw.ac.at/place-', field('Name')))"
-    },
-    {"name": "Identifier", "type": "text"}
+    {"name": "Subject_uri", "type": "text"},
+    {"name": "Predicate_uri", "type": "link_row", "link_row_table_id": properties["id"], "has_related_field": False},
+    {"name": "Literal", "type": "text"},
+    {"name": "Language", "type": "text"}
 ]
 places_fields = update_table_field_types(
     places["id"],
@@ -133,13 +130,10 @@ delete_table_field(places["id"], jwt_token, ["Notes", "Active"])
 # organizations table fields
 default_fields = [
     {"name": "Name", "type": "text"},
-    {"name": "Notes", "type": "long_text"},
-    {
-        "name": "Uri",
-        "type": "formula",
-        "formula": "lower(concat('https://id.acdh.oeaw.ac.at/org-', field('Name')))"
-    },
-    {"name": "Identifier", "type": "text"}
+    {"name": "Subject_uri", "type": "text"},
+    {"name": "Predicate_uri", "type": "link_row", "link_row_table_id": properties["id"], "has_related_field": False},
+    {"name": "Literal", "type": "text"},
+    {"name": "Language", "type": "text"}
 ]
 organizations_fields = update_table_field_types(
     organizations["id"],
@@ -152,7 +146,6 @@ delete_table_field(organizations["id"], jwt_token, ["Notes", "Active"])
 default_fields = [
     {"name": "Subject_uri", "type": "text"},
     {"name": "Class", "type": "link_row", "link_row_table_id": classes["id"], "has_related_field": False},
-    {"name": "Notes", "type": "long_text"},
     {"name": "Predicate_uri", "type": "link_row", "link_row_table_id": properties["id"], "has_related_field": False},
     {"name": "Object_uri_persons", "type": "link_row", "link_row_table_id": persons["id"], "has_related_field": False},
     {"name": "Object_uri_places", "type": "link_row", "link_row_table_id": places["id"], "has_related_field": False},
@@ -178,6 +171,7 @@ default_fields = [
     {"name": "Language", "type": "text"},
     {"name": "Date", "type": "date"},
     {"name": "Number", "type": "number"},
+    {"name": "Inherit", "type": "link_row", "link_row_table_id": classes["id"], "has_related_field": False}
 ]
 project_fields = update_table_field_types(
     project["id"],
@@ -197,7 +191,6 @@ update_table_rows_batch(class_table, classes)
 
 project_properties = [
     "hasTitle",
-    "hasIdentifier",
     "hasDescription",
     "hasContact",
     "hasMetadataCreator",
@@ -207,7 +200,6 @@ project_properties = [
 ]
 topCol_properties = [
     "hasTitle",
-    "hasIdentifier",
     "hasDescription",
     "hasContact",
     "hasMetadataCreator",
@@ -217,46 +209,41 @@ topCol_properties = [
     "hasRightsHolder",
     "hasLicensor",
     "hasDepositor",
-    "hasCurator",
-    "isPartOf"
+    "hasCurator"
 ]
 collection_properties = [
     "hasTitle",
-    "hasIdentifier",
     "hasMetadataCreator",
     "hasRelatedDiscipline",
     "hasOwner",
     "hasRightsHolder",
     "hasLicensor",
-    "hasDepositor",
-    "isPartOf"
+    "hasDepositor"
 ]
 resource_properties = [
     "hasTitle",
-    "hasIdentifier",
     "hasMetadataCreator",
     "hasRelatedDiscipline",
     "hasOwner",
     "hasRightsHolder",
     "hasLicensor",
     "hasDepositor",
-    "isPartOf",
-    "hasCategory",
     "hasLicense",
-    "hasAccessRestriction"
+    "hasCategory",
+    "isPartOf"
 ]
 metadata_properties = [
     "hasTitle",
-    "hasIdentifier",
     "hasMetadataCreator",
     "hasOwner",
     "hasRightsHolder",
     "hasLicensor",
     "hasDepositor",
-    "isPartOf",
-    "hasCategory",
     "hasLicense",
-    "hasAccessRestriction"
+    "hasCategory"
+]
+publication_properties = [
+    "hasTitle"
 ]
 # Create Initial Project Template
 ids = 1
@@ -277,7 +264,8 @@ for prop in project_properties:
         "Literal": None,
         "Language": None,
         "Date": None,
-        "Number": None
+        "Number": None,
+        "Inherit": []
     })
     ids += 1
 topCol_template = []
@@ -297,7 +285,8 @@ for prop in topCol_properties:
         "Literal": None,
         "Language": None,
         "Date": None,
-        "Number": None
+        "Number": None,
+        "Inherit": []
     })
     ids += 1
 collection_template = []
@@ -317,7 +306,8 @@ for prop in collection_properties:
         "Literal": None,
         "Language": None,
         "Date": None,
-        "Number": None
+        "Number": None,
+        "Inherit": []
     })
     ids += 1
 resource_template = []
@@ -337,7 +327,8 @@ for prop in resource_properties:
         "Literal": None,
         "Language": None,
         "Date": None,
-        "Number": None
+        "Number": None,
+        "Inherit": []
     })
     ids += 1
 metadata_template = []
@@ -357,13 +348,37 @@ for prop in metadata_properties:
         "Literal": None,
         "Language": None,
         "Date": None,
-        "Number": None
+        "Number": None,
+        "Inherit": []
     })
     ids += 1
+publication_template = []
+for prop in publication_properties:
+    metadata_template.append({
+        "id": ids,
+        "order": f"{ ids }.00000000000000000000",
+        "Subject_uri": "your-publication",
+        "Class": [x["id"] for x in classes if x["Name"] == "Publication" and
+                  x["Namespace"] == "https://vocabs.acdh.oeaw.ac.at/schema#"],
+        "Predicate_uri": [x["id"] for x in properties if x["Name"] == prop and
+                          x["Namespace"] == "https://vocabs.acdh.oeaw.ac.at/schema#"],
+        "Object_uri_persons": [],
+        "Object_uri_places": [],
+        "Object_uri_organizations": [],
+        "Object_uri_resource": [],
+        "Literal": None,
+        "Language": None,
+        "Date": None,
+        "Number": None,
+        "Inherit": []
+    })
+    ids += 1
+
 print(f"Updating {ids} Project table rows...")
 update_table_rows_batch(project["id"], project_template)
 update_table_rows_batch(project["id"], topCol_template)
 update_table_rows_batch(project["id"], collection_template)
 update_table_rows_batch(project["id"], resource_template)
 update_table_rows_batch(project["id"], metadata_template)
+update_table_rows_batch(project["id"], publication_template)
 print("Done...")
