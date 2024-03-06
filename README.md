@@ -27,3 +27,12 @@ python scripts/arche2json.py # create json files from ARCHE Schema
 python scripts/vocabs2json.py # create json files from vocabs.acdh.oeaw.ac.at
 python scripts/arche2baserow.py # upload json files to baserow to create tables
 ```
+
+## Useful Links
+
+* [Baserow API](https://baserow.io/user-docs/database-api)
+* [Vocabs](https://vocabs.acdh.oeaw.ac.at/)
+* [ARCHE](https://arche.acdh.oeaw.ac.at/)
+* [ARCHE Schema](https://github.com/acdh-oeaw/arche-schema)
+* [ARCHE Metadata Crawler](https://github.com/acdh-oeaw/arche-metadata-crawler)
+* [ARCHE Schema Table](https://arche-dev.acdh-dev.oeaw.ac.at/browser/api/getRootTable/de?_format=application/json)
