@@ -131,8 +131,6 @@ dmypy.json
 
 # project specific
 *.ipynb
-*.ttl
-*.trig
 
 /out
 /json_dumps

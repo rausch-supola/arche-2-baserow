@@ -7,6 +7,7 @@ BASEROW_URL = "https://baserow.acdh-dev.oeaw.ac.at/api/"
 BASEROW_USER = os.environ.get("BASEROW_USER")
 BASEROW_PW = os.environ.get("BASEROW_PW")
 BASEROW_TOKEN = os.environ.get("BASEROW_TOKEN")
+PROJECT_NAME = os.environ.get("PROJECT_NAME")
 # Arche schema url, namespaces and xpaths
 SCHEMA_PATH = "https://raw.githubusercontent.com/acdh-oeaw/arche-schema/master/acdh-schema.owl"
 VOCABS_PATH = "https://github.com/acdh-oeaw/vocabs-acdh-dumps/raw/main/vocabs-main/"
@@ -32,6 +33,27 @@ XPATHS = {
     "label": "./rdfs:label[@xml:lang='en']/text()",
     "comment": "./rdfs:comment[@xml:lang='en']/text()"
 }
+# denormalize mapping
+MAPPING_PROJECT = {
+    "Class": "Classes.json",
+    "Predicate_uri": "Properties.json",
+    "Object_uri_persons": "Persons.json",
+    "Object_uri_places": "Places.json",
+    "Object_uri_organizations": "Organizations.json",
+    "Object_uri_vocabs": "Vocabs.json"
+}
+MAPPING_PERSONS = {
+    "Predicate_uri": "Properties.json",
+    "Object_uri_organizations": "Organizations.json"
+}
+MAPPING_ORGS = {
+    "Predicate_uri": "Properties.json"
+}
+MAPPING_PLACES = {
+    "Predicate_uri": "Properties.json"
+}
+LANG_SPECIAL_TOKEN = "na"
+
 # Baserow client and jwt_token
 br_client = BaseRowClient(BASEROW_USER, BASEROW_PW, BASEROW_TOKEN, br_base_url=BASEROW_URL)
 jwt_token = br_client.get_jwt_token()
