@@ -1,0 +1,17 @@
+@prefix arche: <https://vocabs.acdh.oeaw.ac.at/schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://id.acdh.oeaw.ac.at/your-collection> a arche:Collection .
+
+<https://id.acdh.oeaw.ac.at/your-metadata> a arche:Metadata .
+
+<https://id.acdh.oeaw.ac.at/your-project> a arche:Project .
+
+<https://id.acdh.oeaw.ac.at/your-publication> a arche:Publication .
+
+<https://id.acdh.oeaw.ac.at/your-resource> a arche:Resource .
+
+<https://id.acdh.oeaw.ac.at/your-top-collection> a arche:TopCollection ;
+    arche:hasTitle "2024-03-07"^^xsd:date,
+        "my title"@en .
+
