@@ -23,6 +23,7 @@ jobs:
       BASEROW_DB_ID: ${{ github.event.inputs.database_id }}
       BASEROW_USER: ${{ secrets.BASEROW_USER }}
       BASEROW_PW: ${{ secrets.BASEROW_PW }}
+      PROJECT_NAME: ${{ github.event.inputs.project_name }}
     steps:
       - name: Check out source repository
         uses: actions/checkout@v3
