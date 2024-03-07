@@ -19,7 +19,7 @@ It creates the following tables:
 * Add more secrets for the user as `BASEROW_USER` and password as `BASEROW_PW`. 
 * Then create a new workflow file in the `.github/workflows` directory and copy the content of the `update_baserow.yml` file. 
 * Then push the changes to the repository. 
-* [Trigger the workflow manually](https://docs.github.com/en/actions/using-workflows/manually-running-a-workflow) and add the Baserow Datebase ID of the database in your Baserow workspace in the required Github Actions Input field.
+* [Trigger the workflow manually](https://docs.github.com/en/actions/using-workflows/manually-running-a-workflow). This will require the input of the Baserow Database ID you want to use.
 
 ## Installation and Usage (Local)
 
