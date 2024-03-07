@@ -12,7 +12,7 @@ on:
         type: string
         description: '(Required) Project Name as string'
         required: true
-        default: '' 
+        default: 'my-arche-project'
 
 jobs:
   update_baserow:
