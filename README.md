@@ -13,7 +13,7 @@ It creates the following tables:
 
 ## Usage (Github Actions)
 
-* Login to Baserow and create a new workspace for a project.
+* Login to Baserow and create a new workspace for a project. In this workspace, create a new database and note the database ID.
 * Then [create a new API token in Baserow](https://baserow.io/user-docs/personal-api-tokens). 
 * Fork this repository and add the API token to the [secrets of the Github repository](https://docs.github.com/en/codespaces/managing-codespaces-for-your-organization/managing-development-environment-secrets-for-your-repository-or-organization) as `BASEROW_TOKEN`.
 * Add more secrets for the user as `BASEROW_USER` and password as `BASEROW_PW`. 
